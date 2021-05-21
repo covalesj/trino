@@ -68,12 +68,10 @@ public class KerberosAuthentication
         checkArgument(exists(keytabPath), "keytab does not exist: %s", keytabLocation);
         checkArgument(isReadable(keytabPath), "keytab is not readable: %s", keytabLocation);
         this.principal = createKerberosPrincipal(principal);
-        if(keyCacheLocation != null)
-        {
+        if (keyCacheLocation != null) {
             Path keyCachePath = Paths.get(keyCacheLocation);
             checkArgument(exists(keyCachePath), "key cache does not exist: %s", keyCacheLocation);
             checkArgument(isReadable(keyCachePath), "key cache is not readable: %s", keyCacheLocation);
-   
         }
         this.configuration = createConfiguration(this.principal.getName(), keytabLocation, keyCacheLocation);
     }
@@ -110,10 +108,9 @@ public class KerberosAuthentication
                 .put("isInitiator", "true")
                 .put("principal", principal)
                 .put("keyTab", keytabLocation);
-        if(keycacheLocation != null)
-        {
+        if (keycacheLocation != null) {
             optionsBuilder = optionsBuilder.put("useTicketCache", "true")
-                    .put("ticketCache",keycacheLocation);
+                    .put("ticketCache", keycacheLocation);
         }
         if (log.isDebugEnabled()) {
             optionsBuilder.put("debug", "true");
