@@ -57,7 +57,25 @@ public class KerberosAuthentication
         checkArgument(exists(keytabPath), "keytab does not exist: %s", keytabLocation);
         checkArgument(isReadable(keytabPath), "keytab is not readable: %s", keytabLocation);
         this.principal = createKerberosPrincipal(principal);
-        this.configuration = createConfiguration(this.principal.getName(), keytabLocation);
+        this.configuration = createConfiguration(this.principal.getName(), keytabLocation, null);
+    }
+
+    public KerberosAuthentication(String principal, String keytabLocation, String keyCacheLocation)
+    {
+        requireNonNull(principal, "principal is null");
+        requireNonNull(keytabLocation, "keytabLocation is null");
+        Path keytabPath = Paths.get(keytabLocation);
+        checkArgument(exists(keytabPath), "keytab does not exist: %s", keytabLocation);
+        checkArgument(isReadable(keytabPath), "keytab is not readable: %s", keytabLocation);
+        this.principal = createKerberosPrincipal(principal);
+        if(keyCacheLocation != null)
+        {
+            Path keyCachePath = Paths.get(keyCacheLocation);
+            checkArgument(exists(keyCachePath), "key cache does not exist: %s", keyCacheLocation);
+            checkArgument(isReadable(keyCachePath), "key cache is not readable: %s", keyCacheLocation);
+   
+        }
+        this.configuration = createConfiguration(this.principal.getName(), keytabLocation, keyCacheLocation);
     }
 
     public Subject getSubject()
@@ -83,7 +101,7 @@ public class KerberosAuthentication
         }
     }
 
-    private static Configuration createConfiguration(String principal, String keytabLocation)
+    private static Configuration createConfiguration(String principal, String keytabLocation, String keycacheLocation)
     {
         ImmutableMap.Builder<String, String> optionsBuilder = ImmutableMap.<String, String>builder()
                 .put("useKeyTab", "true")
@@ -92,7 +110,11 @@ public class KerberosAuthentication
                 .put("isInitiator", "true")
                 .put("principal", principal)
                 .put("keyTab", keytabLocation);
-
+        if(keycacheLocation != null)
+        {
+            optionsBuilder = optionsBuilder.put("useTicketCache", "true")
+                    .put("ticketCache",keycacheLocation);
+        }
         if (log.isDebugEnabled()) {
             optionsBuilder.put("debug", "true");
         }

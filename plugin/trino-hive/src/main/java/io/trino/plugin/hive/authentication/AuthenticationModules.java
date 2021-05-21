@@ -105,4 +105,11 @@ public final class AuthenticationModules
         KerberosHadoopAuthentication kerberosHadoopAuthentication = createKerberosHadoopAuthentication(kerberosAuthentication, updater);
         return new CachingKerberosHadoopAuthentication(kerberosHadoopAuthentication);
     }
+
+    public static HadoopAuthentication createCachingKerberosHadoopAuthentication(String principal, String keytabLocation, String clientTicketCacheLocation, HdfsConfigurationInitializer updater)
+    {
+        KerberosAuthentication kerberosAuthentication = new KerberosAuthentication(principal, keytabLocation);
+        KerberosHadoopAuthentication kerberosHadoopAuthentication = createKerberosHadoopAuthentication(kerberosAuthentication, updater);
+        return new CachingKerberosHadoopAuthentication(kerberosHadoopAuthentication);
+    }
 }

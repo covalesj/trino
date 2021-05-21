@@ -24,6 +24,7 @@ public class MetastoreKerberosConfig
     private String hiveMetastoreServicePrincipal;
     private String hiveMetastoreClientPrincipal;
     private String hiveMetastoreClientKeytab;
+    private String hiveMetastoreClientTicketCache;
 
     @NotNull
     public String getHiveMetastoreServicePrincipal()
@@ -65,6 +66,21 @@ public class MetastoreKerberosConfig
     public MetastoreKerberosConfig setHiveMetastoreClientKeytab(String hiveMetastoreClientKeytab)
     {
         this.hiveMetastoreClientKeytab = hiveMetastoreClientKeytab;
+        return this;
+    }
+
+    @NotNull
+    @FileExists
+    public String getHiveMetastoreClientTicketCache()
+    {
+        return this.hiveMetastoreClientTicketCache;
+    }
+
+    @Config("hive.metastore.client.ticketcache")
+    @ConfigDescription("Hive Metastore client ticket cache location")
+    public MetastoreKerberosConfig setHiveMetastoreClientTicketCache(String hiveMetastoreClientTicketCache)
+    {
+        this.hiveMetastoreClientKeytab = hiveMetastoreClientTicketCache;
         return this;
     }
 }

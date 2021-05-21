@@ -77,7 +77,8 @@ public class ThriftMetastoreAuthenticationModule
         {
             String principal = config.getHiveMetastoreClientPrincipal();
             String keytabLocation = config.getHiveMetastoreClientKeytab();
-            return createCachingKerberosHadoopAuthentication(principal, keytabLocation, updater);
+            String clientTicketCache = config.getHiveMetastoreClientTicketCache();
+            return createCachingKerberosHadoopAuthentication(principal, keytabLocation, clientTicketCache, updater);
         }
     }
 }
